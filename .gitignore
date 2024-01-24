@@ -1,0 +1,10 @@
+/.idea/
+*.terraform
+*.tfstate
+/_logs/
+*.pem
+*.zip
+*.terraform.lock.hcl
+/nohup.out
+
+.DS_Store

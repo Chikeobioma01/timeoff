@@ -1,0 +1,49 @@
+name: 'timeoff Environment Deployment Workflows'
+on:
+  push:
+    branches: [ main ]
+  workflow_dispatch:
+jobs:
+  pipeline:
+    name: timeoff Environment Pipeline
+    runs-on: ubuntu-latest
+    steps:
+      - name: 'Checkout'
+        uses: actions/checkout@v2.3.4
+      # https://github.com/aws-actions/configure-aws-credentials(Community)
+      - name: Configure AWS Credentials
+        uses: aws-actions/configure-aws-credentials@v1
+        with:
+          aws-access-key-id: ${{ secrets.AWS_ACCESS_KEY_ID }}
+          aws-secret-access-key: ${{ secrets.AWS_SECRET_ACCESS_KEY }}
+          aws-region: ap-south-1
+
+      - name: 'Login EKS Cluster'
+        run: |
+          aws eks update-kubeconfig --name eks-prod --region ap-south-1
+          export KUBECONFIG=~/.kube/config
+
+      - name: 'Login To Amazon ECR'
+        id: login-ecr
+        uses: aws-actions/amazon-ecr-login@v1
+
+      # In this section, we are Preparing Docker images for the application and push AWS ECR
+
+      - name: 'Prepare Docker Images and push to Amazon ECR'
+        env:
+          ECR_REGISTRY: ${{ steps.login-ecr.outputs.registry }}
+          ECR_REPOSITORY: timeoff
+          IMAGE_TAG: timeoff-${{ github.run_id }}
+        run: |
+          cd application && \
+          docker  build --no-cache  \
+          -t $ECR_REGISTRY/$ECR_REPOSITORY:$IMAGE_TAG .
+          docker push $ECR_REGISTRY/$ECR_REPOSITORY:$IMAGE_TAG
+
+      - name: 'Deploy to timeoff'
+        env:
+          IMAGE_TAG: ${{ github.run_id }}
+          ECR_REPOSITORY: timeoff
+          ECR_REGISTRY: ${{ steps.login-ecr.outputs.registry }}
+        run: |
+          helm upgrade -i timeoff -n timeoff --create-namespace --set image.repository=$ECR_REGISTRY/$ECR_REPOSITORY: --set image.tag=timeoff-$IMAGE_TAG  ./_infra/helm/timeoff -f ./_infra/helm/timeoff/values/values.yaml
