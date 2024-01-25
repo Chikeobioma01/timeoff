@@ -33,7 +33,7 @@ jobs:
         env:
           ECR_REGISTRY: ${{ steps.login-ecr.outputs.registry }}
           ECR_REPOSITORY: timeoff-test
-          IMAGE_TAG: timoff-${{ github.run_id }}
+          IMAGE_TAG: timeoff-${{ github.run_id }}
         run: |
           cd application/timeoff-management-application && docker  build --no-cache  \
           -t $ECR_REGISTRY/$ECR_REPOSITORY:$IMAGE_TAG .
@@ -42,7 +42,5 @@ jobs:
       - name: 'Deploy to timeoff'
         env:
           IMAGE_TAG: ${{ github.run_id }}
-          ECR_REPOSITORY: timeoff
-          ECR_REGISTRY: ${{ steps.login-ecr.outputs.registry }}
         run: |
           helm upgrade -i timeoff -n timeoff --create-namespace --set image.repository=$ECR_REGISTRY/$ECR_REPOSITORY: --set image.tag=timeoff-$IMAGE_TAG  ./_infra/helm/timeoff -f ./_infra/helm/timeoff/values/values.yaml
