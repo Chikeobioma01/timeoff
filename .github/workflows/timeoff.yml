@@ -20,7 +20,7 @@ jobs:
 
       - name: 'Login EKS Cluster'
         run: |
-          aws eks update-kubeconfig --name eks-prod --region ap-south-1
+          aws eks update-kubeconfig --name eks-test-cluster --region us-east-1
           export KUBECONFIG=~/.kube/config
 
       - name: 'Login To Amazon ECR'
