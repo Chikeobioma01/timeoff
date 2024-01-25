@@ -10,7 +10,7 @@ ingress:
     alb.ingress.kubernetes.io/ssl-policy: 'ELBSecurityPolicy-TLS-1-2-Ext-2018-06'
     alb.ingress.kubernetes.io/listen-ports: '[{"HTTP": 80}]'
   hosts:
-    - host: test-timouff.com
+    - host: timeoff.influbot.ai
       paths:
         - path: /*
           pathType: ImplementationSpecific
