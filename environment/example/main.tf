@@ -1,6 +1,15 @@
 provider "aws" {
-  region = "ca-central-1"
+  region = "us-east-1"
 }
+
+terraform {
+  backend "s3" {
+    bucket = "example-teraaform-tfstate-bucket"
+    key    = "terraform.tfstate"
+    region = "us-east-1"
+  }
+}
+
 
 module "vpc" {
   source = "./../../_modules/terraform-aws-vpc"
@@ -105,7 +114,7 @@ module "eks" {
   endpoint_public_access = true
   # Networking
   vpc_id                            = module.vpc.vpc_id
-  subnet_ids                        = module.subnets.private_subnet_id
+  subnet_ids                        = module.subnets.public_subnet_id
   allowed_security_groups           = [module.http_https.security_group_ids]
   eks_additional_security_group_ids = [module.http_https.security_group_ids]
   allowed_cidr_blocks               = [module.vpc.vpc_cidr_block]

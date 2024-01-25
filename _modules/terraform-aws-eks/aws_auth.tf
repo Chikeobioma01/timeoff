@@ -49,7 +49,7 @@ resource "kubernetes_config_map" "aws_auth_ignore_changes" {
   depends_on = [null_resource.wait_for_cluster[0]]
 
   metadata {
-    name      = "auth"
+    name      = "auth-aws"
     namespace = "kube-system"
   }
 

@@ -1,7 +1,7 @@
 name: 'timeoff Environment Deployment Workflows'
 on:
   push:
-    branches: [ main ]
+    branches: [ master ]
   workflow_dispatch:
 jobs:
   pipeline:
@@ -35,7 +35,7 @@ jobs:
           ECR_REPOSITORY: timeoff
           IMAGE_TAG: timeoff-${{ github.run_id }}
         run: |
-          cd application && \
+          cd application/timeoff-management-application && \
           docker  build --no-cache  \
           -t $ECR_REGISTRY/$ECR_REPOSITORY:$IMAGE_TAG .
           docker push $ECR_REGISTRY/$ECR_REPOSITORY:$IMAGE_TAG
