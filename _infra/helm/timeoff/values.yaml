@@ -5,8 +5,8 @@
 replicaCount: 1
 
 image:
-  repository: nginx
-  pullPolicy: IfNotPresent
+  repository: 767397878340.dkr.ecr.us-east-1.amazonaws.com/timeoff-test
+  pullPolicy: Always
   # Overrides the image tag whose default is the chart appVersion.
   tag: ""
 
