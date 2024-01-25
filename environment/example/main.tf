@@ -79,20 +79,20 @@ data "aws_iam_policy_document" "kms" {
 }
 
 data "aws_caller_identity" "current" {}
-#
-#module "acm" {
-#  source = "./../../_modules/terraform-aws-acm"
-#
-#  name        = "certificate"
-#  environment = var.environment
-#  label_order = var.label_order
-#
-#  enable_aws_certificate    = true
-#  domain_name               = ""
-#  subject_alternative_names = [""]
-#  validation_method         = "DNS"
-#  enable_dns_validation     = false
-#}
+
+module "acm" {
+  source = "./../../_modules/terraform-aws-acm"
+
+  name        = "certificate"
+  environment = var.environment
+  label_order = var.label_order
+
+  enable_aws_certificate    = true
+  domain_name               = "timeoff.opsstation.com"
+  subject_alternative_names = ["*.timeoff.opsstation.com"]
+  validation_method         = "DNS"
+  enable_dns_validation     = false
+}
 
 module "ecr" {
   source             = "./../../_modules/terraform-aws-ecr"

@@ -7,10 +7,13 @@ ingress:
     alb.ingress.kubernetes.io/load-balancer-name: eks-alb
     alb.ingress.kubernetes.io/group.name: timeoff-alb
     alb.ingress.kubernetes.io/scheme: internet-facing
+    alb.ingress.kubernetes.io/certificate-arn: arn:aws:acm:us-east-1:767397878340:certificate/5ec0a39a-ad95-4887-b872-d5ee67ba2979
     alb.ingress.kubernetes.io/ssl-policy: 'ELBSecurityPolicy-TLS-1-2-Ext-2018-06'
-    alb.ingress.kubernetes.io/listen-ports: '[{"HTTP": 80}]'
+    alb.ingress.kubernetes.io/listen-ports: '[{"HTTP": 80}], {"HTTPS":443}]'
+    alb.ingress.kubernetes.io/actions.ssl-redirect: '{"Type": "redirect", "RedirectConfig": { "Protocol": "HTTPS", "Port": "443", "StatusCode": "HTTP_301"}}'
+    alb.ingress.kubernetes.io/load-balancer-attributes: 'idle_timeout.timeout_seconds=600,routing.http2.enabled=true,routing.http.drop_invalid_header_fields.enabled=true'
   hosts:
-    - host: timeoff.influbot.ai
+    - host: timeoff.opsstation.com
       paths:
         - path: /*
           pathType: ImplementationSpecific
