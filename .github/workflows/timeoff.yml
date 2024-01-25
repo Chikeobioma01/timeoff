@@ -45,4 +45,4 @@ jobs:
           ECR_REPOSITORY: timeoff
           ECR_REGISTRY: ${{ steps.login-ecr.outputs.registry }}
         run: |
-          helm upgrade -i timeoff -n timeoff --create-namespace --set image.repository=$ECR_REGISTRY/$ECR_REPOSITORY: --set image.tag=timeoff-$IMAGE_TAG  ./_infra/helm/timeoff -f ./_infra/helm/timeoff/values/values.yaml
+          helm upgrade -i timeoff -n timeoff --create-namespace --set image.tag=timeoff-$IMAGE_TAG  ./_infra/helm/timeoff -f ./_infra/helm/timeoff/values/values.yaml
